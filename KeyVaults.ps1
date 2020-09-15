@@ -1,21 +1,22 @@
 # Create an Array of key vaults
 $keyVaultArray = @(
-"Key-Vault-1",
-"Key-Vault-2",
-"Key-Vault-3"
+	("old-key-vault","new-key-vault"),
+	("old-key-vault2","new-key-vault2")
+
 )
 
 # Azure login
 az login
 
 # New subscription where to clone the key-vault
-$subscription = "mySubsription"
+$subscription = ""
 # New resource group where to clone the key-vault
-$resourceGroup = "myResourceGroup"
+$resourceGroup = ""
 # location of new key vault
-$location = "centralus"
+$location = "eastus"
+
 
 # Loop through this array and process each key-vault
-foreach($vault in $keyVaultArray){	
-	& ".\ProcessKeyVault.ps1" -KeyVaultName $vault -Subscription $subscription -ResourceGroup $resourceGroup -NewKeyVaultLocation $location
+foreach($vaultDic in $keyVaultArray){	
+	& ".\ProcessKeyVault.ps1" -KeyVaultName $vaultDic[0] -Subscription $subscription -ResourceGroup $resourceGroup -KeyVaultLocation $location -NewKeyVaultName $vaultDic[1]
 }

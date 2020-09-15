@@ -6,16 +6,18 @@ Param(
 	[Parameter(Mandatory)]
     [string]$ResourceGroup,
 	[Parameter(Mandatory)]
-    [string]$KeyVaultLocation
+    [string]$KeyVaultLocation,
+    [Parameter(Mandatory)]
+    [string]$NewKeyVaultName
 )
 
 # Create a new dev key vault if it does not exists
-if(-not (az keyvault show --name $KeyVaultName --subscription $Subscription)){
-	az keyvault create --name $KeyVaultName --location $KeyVaultLocation --resource-group $ResourceGroup --subscription $Subscription
+if(-not (az keyvault show --name $NewKeyVaultName --subscription $Subscription)){
+	az keyvault create --name $NewKeyVaultName --location $KeyVaultLocation --resource-group $ResourceGroup --subscription $Subscription
 }
 
 # wait for some time while azure create this 
-while (-not (az keyvault show --name $KeyVaultName --subscription $Subscription)){
+while (-not (az keyvault show --name $NewKeyVaultName --subscription $Subscription)){
 	Start-Sleep -s 10
 }
 
@@ -39,6 +41,6 @@ foreach($secret in $secrets){
 	Write-Host "-----------------------------------------------------------"
 
 	# Time to create new secret in the new key vault
-	az keyvault secret set --name $name --vault-name $KeyVaultName --value $value
+	az keyvault secret set --name $name --vault-name $NewKeyVaultName --value $value
 	Start-Sleep -s 2
 }
